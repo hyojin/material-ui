@@ -8,7 +8,7 @@ import css from 'dom-helpers/style';
 import { createShallowWithContext, createMountWithContext } from 'test/utils';
 import Popover, { styleSheet } from './Popover';
 
-describe('<Popover>', () => {
+describe('<Popover />', () => {
   let shallow;
   let mount;
   let classes;
@@ -26,13 +26,15 @@ describe('<Popover>', () => {
     it('should render a Modal with an invisible backdrop as the root node', () => {
       const wrapper = shallow(<Popover />);
       assert.strictEqual(wrapper.is('Modal'), true, 'should be a Modal');
-      assert.strictEqual(wrapper.prop('backdropVisible'), false, 'should have an invisible backdrop');
+      assert.strictEqual(wrapper.prop('backdropVisible'), false,
+        'should have an invisible backdrop');
     });
 
     it('should pass onRequestClose prop to Modal', () => {
       const fn = () => {};
       const wrapper = shallow(<Popover onRequestClose={fn} />);
-      assert.strictEqual(wrapper.prop('onRequestClose'), fn, 'should be the onRequestClose function');
+      assert.strictEqual(wrapper.prop('onRequestClose'), fn,
+        'should be the onRequestClose function');
     });
 
     it('should pass open prop to Modal as `show`', () => {
@@ -104,7 +106,8 @@ describe('<Popover>', () => {
 
     it('should have a zDepth prop passed down', () => {
       const wrapper = shallow(<Popover />);
-      assert.strictEqual(wrapper.childAt(0).childAt(0).prop('zDepth'), 8, 'should be 8 zDepth by default');
+      assert.strictEqual(wrapper.childAt(0).childAt(0).prop('zDepth'), 8,
+        'should be 8 zDepth by default');
       wrapper.setProps({ zDepth: 16 });
       assert.strictEqual(wrapper.childAt(0).childAt(0).prop('zDepth'), 16, 'should be 16 zDepth');
     });
@@ -129,7 +132,7 @@ describe('<Popover>', () => {
       before(() => {
         handleEnter = spy();
         wrapper = shallow(
-          <Popover onEnter={handleEnter} />
+          <Popover onEnter={handleEnter} />,
         );
         wrapper.instance().handleEnter(element);
       });
@@ -138,23 +141,23 @@ describe('<Popover>', () => {
         assert.strictEqual(element.style.opacity, 0, 'should be transparent');
         assert.strictEqual(
           element.style.transform,
-          wrapper.instance().getScale(0.75),
-          'should have the starting scale'
+          Popover.getScale(0.75),
+          'should have the starting scale',
         );
         assert.strictEqual(
           element.style.top === '16px' && element.style.left === '16px',
           true,
-          'should offset the element from the top left of the screen by 16px'
+          'should offset the element from the top left of the screen by 16px',
         );
         assert.strictEqual(
           element.style.transition,
-          'opacity 0ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms,transform 0ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms',
-          'should apply a transition for transform and opacity'
+          'opacity 0ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms,transform 0ms cubic-bezier(0.4, 0.0, 0.2, 1) 0ms', // eslint-disable-line max-len
+          'should apply a transition for transform and opacity',
         );
         assert.strictEqual(
           element.style.transformOrigin,
           wrapper.instance().getPositioningStyle(element).transformOrigin,
-          'should have a transformOrigin'
+          'should have a transformOrigin',
         );
       });
 
@@ -170,7 +173,7 @@ describe('<Popover>', () => {
       before(() => {
         handleEntering = spy();
         wrapper = shallow(
-          <Popover onEntering={handleEntering} />
+          <Popover onEntering={handleEntering} />,
         );
         wrapper.instance().handleEntering(element);
       });
@@ -179,8 +182,8 @@ describe('<Popover>', () => {
         assert.strictEqual(element.style.opacity, 1, 'should be visible');
         assert.strictEqual(
           element.style.transform,
-          wrapper.instance().getScale(1),
-          'should have the full scale'
+          Popover.getScale(1),
+          'should have the full scale',
         );
       });
 
@@ -196,7 +199,7 @@ describe('<Popover>', () => {
       before(() => {
         handleExit = spy();
         wrapper = shallow(
-          <Popover onExit={handleExit} />
+          <Popover onExit={handleExit} />,
         );
         wrapper.instance().handleExit(element);
       });
@@ -205,8 +208,8 @@ describe('<Popover>', () => {
         assert.strictEqual(element.style.opacity, 0, 'should be transparent');
         assert.strictEqual(
           element.style.transform,
-          wrapper.instance().getScale(0.75),
-          'should have the exit scale'
+          Popover.getScale(0.75),
+          'should have the exit scale',
         );
       });
 
@@ -247,7 +250,7 @@ describe('<Popover>', () => {
                 popoverEl = window.document.querySelector('[data-mui-test="Popover"]');
                 resolve();
               }}
-            />
+            />,
           );
           wrapper.setProps({ open: true });
         });
@@ -257,13 +260,13 @@ describe('<Popover>', () => {
         assert.strictEqual(
           popoverEl.style.top,
           `${top}px`,
-          'should position at the correct top offset'
+          'should position at the correct top offset',
         );
 
         assert.strictEqual(
           popoverEl.style.left,
           `${left}px`,
-          'should position at the correct left offset'
+          'should position at the correct left offset',
         );
         wrapper.unmount();
       };

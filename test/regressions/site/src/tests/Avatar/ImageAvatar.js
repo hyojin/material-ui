@@ -1,13 +1,25 @@
 // @flow weak
 
-import React from 'react';
+import React, { Component }from 'react';
 import Avatar from 'material-ui/Avatar';
+import image from './ImageAvatar.jpg';
 
-export default function ImageAvatar() {
-  return (
-    <Avatar
-      alt="Remy Sharp"
-      src="https://s3.amazonaws.com/uifaces/faces/twitter/rem/73.jpg"
-    />
-  );
+export default class ImageAvatar extends Component {
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  componentDidMount() {
+    this.sleep(1000);
+  }
+
+  render() {
+    return (
+      <Avatar
+        alt="Remy Sharp"
+        src={image}
+      />
+    );
+  }
 }

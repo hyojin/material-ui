@@ -14,7 +14,7 @@ import IconButton from 'material-ui/IconButton';
 const styleSheet = createStyleSheet('CheckboxList', (theme) => ({
   root: {
     width: '100%',
-    maxWidth: '360px',
+    maxWidth: 360,
     background: theme.palette.background.paper,
   },
 }));
@@ -50,7 +50,7 @@ export default class CheckboxList extends Component {
     return (
       <div className={classes.root}>
         <List>
-          {Array.from({ length: 4 }, (v, k) => k).map((n, index) => (
+          {Array.from({ length: 4 }, (v, k) => k).map((index) => (
             <ListItem
               dense
               button

@@ -8,12 +8,12 @@ export const styleSheet = createStyleSheet('CardMedia', () => ({
   cardMedia: {
     position: 'relative',
   },
-}), { index: -5 });
+}));
 
 export default function CardMedia(props, context) {
   const {
     className: classNameProp,
-    ...other,
+    ...other
   } = props;
 
   const classes = context.styleManager.render(styleSheet);
@@ -25,6 +25,9 @@ export default function CardMedia(props, context) {
 }
 
 CardMedia.propTypes = {
+  /**
+   * The CSS class name of the root element.
+   */
   className: PropTypes.string,
 };
 

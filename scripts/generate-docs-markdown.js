@@ -5,7 +5,7 @@ import recast from 'recast';
 
 function stringOfLength(string, stringLength) {
   let newString = '';
-  for (let i = 0; i < stringLength.length; i++) {
+  for (let i = 0; i < stringLength.length; i += 1) {
     newString += string;
   }
   return newString;
@@ -86,7 +86,7 @@ function generatePropDescription(required, description, type) {
     }
   }
 
-  return `${deprecated} ${jsDocText}${signature}`;
+  return `${deprecated}${jsDocText}${signature}`;
 }
 
 function generatePropType(type) {
@@ -118,12 +118,11 @@ function generatePropType(type) {
 
 function generateProps(props) {
   const title = 'Props';
-  const header = `${title}\n${
-    stringOfLength('-', title)}\n\n`;
+  const header = `${title}\n${stringOfLength('-', title)}\n`;
 
   let text = `${header}
 | Name | Type | Default | Description |
-|:-----|:-----|:-----|:-----|\n`;
+|:-----|:-----|:--------|:------------|\n`;
 
   text = Object
     .keys(props)
@@ -142,7 +141,7 @@ function generateProps(props) {
       }
 
       if (prop.required) {
-        key = `<span style="color: #31a148">${key} \*</span>`;
+        key = `<span style="color: #31a148">${key}\u2009*</span>`;
       }
 
       if (prop.type.name === 'custom') {
@@ -151,7 +150,8 @@ function generateProps(props) {
         }
       }
 
-      textProps += `| ${key} | ${generatePropType(prop.type)} | ${defaultValue} | ${description} |\n`;
+      textProps += `| ${key} | ${generatePropType(prop.type)} | ${defaultValue} | ${
+        description} |\n`;
 
       return textProps;
     }, text);
@@ -163,7 +163,9 @@ function generateMarkdown(name, reactAPI) {
   return `${
     generateTitle(name)}\n${
     generateDesciption(reactAPI.description)}\n${
-    generateProps(reactAPI.props)}`;
+    generateProps(reactAPI.props)}\n${
+    'Any other properties supplied will be spread to the root element.'
+  }\n`;
 }
 
 module.exports = generateMarkdown;

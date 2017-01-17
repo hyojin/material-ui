@@ -6,12 +6,9 @@ import classNames from 'classnames';
 
 export const styleSheet = createStyleSheet('ListItemSecondaryAction', () => ({
   secondaryAction: {
-    position: 'absolute',
-    right: 4,
-    top: '50%',
-    marginTop: -24,
+    paddingRight: 8,
   },
-}), { index: -3 });
+}));
 
 export default function ListItemSecondaryAction(props, context) {
   const {
@@ -30,6 +27,9 @@ export default function ListItemSecondaryAction(props, context) {
 
 ListItemSecondaryAction.propTypes = {
   children: PropTypes.node,
+  /**
+   * The CSS class name of the root element.
+   */
   className: PropTypes.string,
 };
 

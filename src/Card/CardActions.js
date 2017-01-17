@@ -15,14 +15,14 @@ export const styleSheet = createStyleSheet('CardActions', () => ({
   actionSpacing: {
     margin: '0 4px',
   },
-}), { index: -5 });
+}));
 
 export default function CardActions(props, context) {
   const {
     actionSpacing,
     children,
     className: classNameProp,
-    ...other,
+    ...other
   } = props;
 
   const classes = context.styleManager.render(styleSheet);
@@ -37,7 +37,13 @@ export default function CardActions(props, context) {
 
 CardActions.propTypes = {
   actionSpacing: PropTypes.bool,
+  /**
+   * The content of the component.
+   */
   children: PropTypes.node,
+  /**
+   * The CSS class name of the root element.
+   */
   className: PropTypes.string,
 };
 

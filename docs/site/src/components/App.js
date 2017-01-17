@@ -2,15 +2,15 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import createMuiTheme from 'material-ui/styles/theme';
+import MuiThemeProvider, { MUI_SHEET_ORDER } from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/palette';
+import createMuiTheme from 'material-ui/styles/theme';
 import { blue, pink } from 'material-ui/styles/colors';
+import { lightTheme, darkTheme, setPrismTheme } from 'docs/site/src/utils/prism';
 import AppRouter from './AppRouter';
-import { lightTheme, darkTheme, setPrismTheme } from '../utils/prism';
 
 function App(props) {
-  const { dark, ...other } = props;
+  const { dark } = props;
 
   const palette = createPalette({
     primary: blue,
@@ -18,7 +18,19 @@ function App(props) {
     type: dark ? 'dark' : 'light',
   });
 
-  const muiTheme = createMuiTheme({ palette });
+  const { styleManager, theme } = MuiThemeProvider.createDefaultContext({
+    theme: createMuiTheme({ palette }),
+  });
+
+  styleManager.setSheetOrder(MUI_SHEET_ORDER.concat([
+    'AppContent',
+    'AppDrawer',
+    'AppDrawerNavItem',
+    'AppFrame',
+    'MarkdownDocs',
+    'MarkdownElement',
+    'Demo',
+  ]));
 
   if (dark) {
     setPrismTheme(darkTheme);
@@ -27,14 +39,14 @@ function App(props) {
   }
 
   return (
-    <MuiThemeProvider theme={muiTheme} {...other}>
+    <MuiThemeProvider theme={theme} styleManager={styleManager}>
       <AppRouter />
     </MuiThemeProvider>
   );
 }
 
 App.propTypes = {
-  dark: PropTypes.bool,
+  dark: PropTypes.bool.isRequired,
 };
 
 export default connect((state) => ({ dark: state.dark }))(App);

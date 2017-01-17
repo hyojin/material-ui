@@ -7,7 +7,7 @@ that you can use to tag your questions.
 
 #[Material-UI](http://www.material-ui.com/)
 [![npm package](https://img.shields.io/npm/v/material-ui.svg?style=flat-square)](https://www.npmjs.org/package/material-ui)
-[![Build Status](https://travis-ci.org/callemall/material-ui.svg?branch=next)](https://travis-ci.org/callemall/material-ui)
+[![CircleCI](https://circleci.com/gh/callemall/material-ui/tree/next.svg?style=svg)](https://circleci.com/gh/callemall/material-ui/tree/next)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-f81a65.svg?style=flat-square)](https://gitter.im/callemall/material-ui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Coverage Status](https://coveralls.io/repos/github/callemall/material-ui/badge.svg?branch=next)](https://coveralls.io/github/callemall/material-ui?branch=next)
 
@@ -73,6 +73,18 @@ Material-UI was designed with the [Roboto](http://www.google.com/fonts/specimen/
 font in mind. So be sure to include it in your project. Here are
 [some instructions](http://www.google.com/fonts#UsePlace:use/Collection:Roboto:400,300,500)
 on how to do so.
+
+### Packaging for use with separate React
+
+For using with React and React DOM from a CDN or as separate minified scripts,
+you can build files with UMD module support as follows:
+
+```sh
+npm install
+npm run build:min
+```
+
+This will build one `material-ui.min.js` file into the `/dist` folder.
 
 ## Usage
 

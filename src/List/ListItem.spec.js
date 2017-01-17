@@ -9,7 +9,7 @@ import ListItem, { styleSheet } from './ListItem';
 /**
  * An item that goes in lists.
  */
-describe('<ListItem>', () => {
+describe('<ListItem />', () => {
   let shallow;
   let classes;
 
@@ -20,14 +20,14 @@ describe('<ListItem>', () => {
 
   it('should render a div', () => {
     const wrapper = shallow(
-      <ListItem />
+      <ListItem />,
     );
     assert.strictEqual(wrapper.is('div'), true, 'should be a div');
   });
 
   it('should render a li', () => {
     const wrapper = shallow(
-      <ListItem component="li" />
+      <ListItem component="li" />,
     );
     assert.strictEqual(wrapper.is('li'), true, 'should be a li');
   });
@@ -42,6 +42,7 @@ describe('<ListItem>', () => {
   it('should disable the gutters', () => {
     const wrapper = shallow(<ListItem gutters={false} />);
     assert.strictEqual(wrapper.hasClass(classes.listItem), true, 'should have the listItem class');
-    assert.strictEqual(wrapper.hasClass(classes.gutters), false, 'should not have the gutters class');
+    assert.strictEqual(wrapper.hasClass(classes.gutters), false,
+      'should not have the gutters class');
   });
 });

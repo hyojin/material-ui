@@ -7,7 +7,7 @@ import { assert } from 'chai';
 import { createShallowWithContext } from 'test/utils';
 import Menu, { styleSheet } from './Menu';
 
-describe('<Menu>', () => {
+describe('<Menu />', () => {
   let shallow;
   let classes;
 
@@ -52,7 +52,8 @@ describe('<Menu>', () => {
 
   it('should pass `classes.entered` to the Popover for the enteredClassName', () => {
     const wrapper = shallow(<Menu />);
-    assert.strictEqual(wrapper.prop('enteredClassName'), classes.entered, 'should be classes.entered');
+    assert.strictEqual(wrapper.prop('enteredClassName'), classes.entered,
+      'should be classes.entered');
   });
 
   it('should pass the instance function `getContentAnchorEl` to Popover', () => {
@@ -60,7 +61,7 @@ describe('<Menu>', () => {
     assert.strictEqual(
       wrapper.prop('getContentAnchorEl'),
       wrapper.instance().getContentAnchorEl,
-      'should be the same function'
+      'should be the same function',
     );
   });
 
@@ -68,7 +69,7 @@ describe('<Menu>', () => {
     const fn = () => {};
     const wrapper = shallow(<Menu onRequestClose={fn} />);
     assert.strictEqual(
-      wrapper.prop('onRequestClose'), fn, 'should be the same function'
+      wrapper.prop('onRequestClose'), fn, 'should be the same function',
     );
   });
 
@@ -76,7 +77,7 @@ describe('<Menu>', () => {
     const el = {};
     const wrapper = shallow(<Menu anchorEl={el} />);
     assert.strictEqual(
-      wrapper.prop('anchorEl'), el, 'should be the same object'
+      wrapper.prop('anchorEl'), el, 'should be the same object',
     );
   });
 
@@ -97,7 +98,8 @@ describe('<Menu>', () => {
     });
 
     it('should render a MenuList inside the Popover', () => {
-      assert.strictEqual(list.is('MenuList'), true, 'should have a MenuList as the immediate child');
+      assert.strictEqual(list.is('MenuList'), true,
+        'should have a MenuList as the immediate child');
     });
 
     it('should spread other props on the list', () => {

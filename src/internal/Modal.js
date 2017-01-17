@@ -34,7 +34,7 @@ export const styleSheet = createStyleSheet('Modal', (theme) => {
       left: 0,
     },
   };
-}, { index: -15 });
+});
 
 /**
  * Still a WIP
@@ -62,11 +62,11 @@ export default class Modal extends Component {
      */
     className: PropTypes.string,
     /**
-     * If true, clicking the backdrop will fire the `onRequestClose` callback
+     * If `true`, clicking the backdrop will fire the `onRequestClose` callback.
      */
     hideOnBackdropClick: PropTypes.bool,
     /**
-     * If true, hitting escape will fire the `onRequestClose` callback
+     * If `true`, hitting escape will fire the `onRequestClose` callback.
      */
     hideOnEscapeKeyUp: PropTypes.bool,
     /**
@@ -74,39 +74,39 @@ export default class Modal extends Component {
      */
     modalManager: PropTypes.object,
     /**
-     * Callback fires when the backdrop is clicked on
+     * Callback fires when the backdrop is clicked on.
      */
     onBackdropClick: PropTypes.func,
     /**
-     * Callback fires when the escape key is pressed and the modal is in focus
-     */
-    onEscapeKeyUp: PropTypes.func,
-    /**
-     * Callback fired before the modal is entering
+     * Callback fired before the modal is entering.
      */
     onEnter: PropTypes.func,
     /**
-     * Callback fired when the modal is entering
+     * Callback fired when the modal is entering.
      */
     onEntering: PropTypes.func,
     /**
-     * Callback fired when the modal has entered
+     * Callback fired when the modal has entered.
      */
     onEntered: PropTypes.func, // eslint-disable-line react/sort-prop-types
     /**
-     * Callback fired before the modal is exiting
+     * Callback fires when the escape key is pressed and the modal is in focus.
+     */
+    onEscapeKeyUp: PropTypes.func, // eslint-disable-line react/sort-prop-types
+    /**
+     * Callback fired before the modal is exiting.
      */
     onExit: PropTypes.func,
     /**
-     * Callback fired when the modal is exiting
+     * Callback fired when the modal is exiting.
      */
     onExiting: PropTypes.func,
     /**
-     * Callback fired when the modal has exited
+     * Callback fired when the modal has exited.
      */
     onExited: PropTypes.func, // eslint-disable-line react/sort-prop-types
     /**
-     * Callback fired when the modal requests to be closed
+     * Callback fired when the modal requests to be closed.
      */
     onRequestClose: PropTypes.func,
     show: PropTypes.bool,
@@ -194,7 +194,8 @@ export default class Modal extends Component {
         modalContent.setAttribute('tabIndex', -1);
         warning(false, (
           'The modal content node does not accept focus. ' +
-          'For the benefit of assistive technologies, the tabIndex of the node is being set to "-1".'
+          'For the benefit of assistive technologies, ' +
+          'the tabIndex of the node is being set to "-1".'
         ));
       }
 
@@ -335,7 +336,7 @@ export default class Modal extends Component {
       onExiting,
       onExited, // eslint-disable-line no-unused-vars
       show,
-      ...other,
+      ...other
     } = this.props;
 
     const classes = this.context.styleManager.render(styleSheet);

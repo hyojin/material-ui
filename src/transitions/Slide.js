@@ -3,6 +3,23 @@
 import React, { Component, PropTypes } from 'react';
 import Transition from '../internal/Transition';
 
+function getTranslateValue(props, element) {
+  const { direction } = props;
+  const rect = element.getBoundingClientRect();
+
+  if (direction === 'left') {
+    return `translate3d(${rect.right + rect.width}px, 0, 0)`;
+  } else if (direction === 'right') {
+    return `translate3d(${0 - (rect.left + rect.width)}px, 0, 0)`;
+  } else if (direction === 'up') {
+    return `translate3d(0, ${rect.bottom + rect.height}px, 0)`;
+  } else if (direction === 'down') {
+    return `translate3d(0, ${0 - (rect.top + rect.height)}px, 0)`;
+  }
+
+  return 'translate3d(0, 0, 0)';
+}
+
 export default class Slide extends Component {
   static propTypes = {
     /**
@@ -15,31 +32,31 @@ export default class Slide extends Component {
     className: PropTypes.string,
     direction: PropTypes.oneOf(['left', 'right', 'up', 'down']),
     /**
-     * Set to slide in by a fixed number of pixels or %
+     * Set to slide in by a fixed number of pixels or %.
      */
     offset: PropTypes.string,
     /**
-     * Callback fired before the component is entering
+     * Callback fired before the component is entering.
      */
     onEnter: PropTypes.func,
     /**
-     * Callback fired when the component is entering
+     * Callback fired when the component is entering.
      */
     onEntering: PropTypes.func,
     /**
-     * Callback fired when the component has entered
+     * Callback fired when the component has entered.
      */
     onEntered: PropTypes.func, // eslint-disable-line react/sort-prop-types
     /**
-     * Callback fired before the component is exiting
+     * Callback fired before the component is exiting.
      */
     onExit: PropTypes.func,
     /**
-     * Callback fired when the component is exiting
+     * Callback fired when the component is exiting.
      */
     onExiting: PropTypes.func,
     /**
-     * Callback fired when the component has exited
+     * Callback fired when the component has exited.
      */
     onExited: PropTypes.func, // eslint-disable-line react/sort-prop-types
     transitionDuration: PropTypes.number,
@@ -55,7 +72,7 @@ export default class Slide extends Component {
   };
 
   handleEnter = (element) => {
-    element.style.transform = this.getTranslateValue(this.props, element);
+    element.style.transform = getTranslateValue(this.props, element);
     if (this.props.onEnter) {
       this.props.onEnter(element);
     }
@@ -63,7 +80,8 @@ export default class Slide extends Component {
 
   handleEntering = (element) => {
     const { transitions } = this.context.theme;
-    element.style.transition = transitions.create('transform', `${this.props.transitionDuration}ms`);
+    element.style.transition = transitions.create('transform',
+      `${this.props.transitionDuration}ms`);
     element.style.transform = 'translate3d(0, 0, 0)';
     if (this.props.onEntering) {
       this.props.onEntering(element);
@@ -71,28 +89,11 @@ export default class Slide extends Component {
   };
 
   handleExiting = (element) => {
-    element.style.transform = this.getTranslateValue(this.props, element);
+    element.style.transform = getTranslateValue(this.props, element);
     if (this.props.onExiting) {
       this.props.onExiting(element);
     }
   };
-
-  getTranslateValue(props, element) {
-    const { direction } = props;
-    const rect = element.getBoundingClientRect();
-
-    if (direction === 'left') {
-      return `translate3d(${rect.right + rect.width}px, 0, 0)`;
-    } else if (direction === 'right') {
-      return `translate3d(${0 - (rect.left + rect.width)}px, 0, 0)`;
-    } else if (direction === 'up') {
-      return `translate3d(0, ${rect.bottom + rect.height}px, 0)`;
-    } else if (direction === 'down') {
-      return `translate3d(0, ${0 - (rect.top + rect.height)}px, 0)`;
-    }
-
-    return 'translate3d(0, 0, 0)';
-  }
 
   render() {
     const {
@@ -102,7 +103,7 @@ export default class Slide extends Component {
       onEntering, // eslint-disable-line no-unused-vars
       onExiting, // eslint-disable-line no-unused-vars
       transitionDuration, // eslint-disable-line no-unused-vars
-      ...other,
+      ...other
     } = this.props;
 
     return (

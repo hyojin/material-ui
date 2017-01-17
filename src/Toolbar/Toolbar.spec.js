@@ -9,7 +9,7 @@ import Toolbar, { styleSheet } from './Toolbar';
 /**
  * An item that goes in lists.
  */
-describe('<Toolbar>', () => {
+describe('<Toolbar />', () => {
   let shallow;
   let classes;
 
@@ -20,7 +20,7 @@ describe('<Toolbar>', () => {
 
   it('should render a div', () => {
     const wrapper = shallow(
-      <Toolbar />
+      <Toolbar />,
     );
     assert.strictEqual(wrapper.is('div'), true, 'should be a div');
   });
@@ -35,6 +35,7 @@ describe('<Toolbar>', () => {
   it('should disable the gutters', () => {
     const wrapper = shallow(<Toolbar gutters={false} />);
     assert.strictEqual(wrapper.hasClass(classes.root), true, 'should have the root class');
-    assert.strictEqual(wrapper.hasClass(classes.gutters), false, 'should not have the gutters class');
+    assert.strictEqual(wrapper.hasClass(classes.gutters), false,
+      'should not have the gutters class');
   });
 });

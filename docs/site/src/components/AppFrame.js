@@ -2,48 +2,59 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import { createStyleSheet } from 'jss-theme-reactor';
 import Text from 'material-ui/Text';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
-import { throttle } from 'material-ui/utils/helpers';
-import addEventListener from 'material-ui/utils/addEventListener';
-
+import withWidth, { isWidthUp } from 'material-ui/utils/withWidth';
+import MenuIcon from 'material-ui/svg-icons/menu';
+import LightbulbOutlineIcon from 'material-ui/svg-icons/lightbulb-outline';
 import AppDrawer from './AppDrawer';
 
-const globalStyleSheet = createStyleSheet('global', (theme) => ({
-  html: { boxSizing: 'border-box' },
-  '*, *:before, *:after': { boxSizing: 'inherit' },
-  body: {
-    margin: 0,
-    background: theme.palette.background.default,
-    fontFamily: theme.typography.fontFamily,
-    color: theme.palette.text.primary,
-    lineHeight: '1.2',
-    overflowX: 'hidden',
-    WebkitFontSmoothing: 'antialiased', // Antialiasing.
-    MozOsxFontSmoothing: 'grayscale', // Antialiasing.
-  },
-  a: {
-    color: theme.palette.accent.A400,
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-  p: {
-    lineHeight: '1.6',
-  },
-  img: {
-    maxWidth: '100%',
-    height: 'auto',
-    width: 'auto',
-  },
-}), { named: false });
+function getTitle(routes) {
+  for (let i = routes.length - 1; i >= 0; i -= 1) {
+    if (routes[i].hasOwnProperty('title')) {
+      return routes[i].title;
+    }
+  }
+
+  return null;
+}
 
 const styleSheet = createStyleSheet('AppFrame', (theme) => {
   return {
+    '@global': {
+      html: {
+        boxSizing: 'border-box',
+      },
+      '*, *:before, *:after': {
+        boxSizing: 'inherit',
+      },
+      body: {
+        margin: 0,
+        background: theme.palette.background.default,
+        fontFamily: theme.typography.fontFamily,
+        color: theme.palette.text.primary,
+        lineHeight: '1.2',
+        overflowX: 'hidden',
+        WebkitFontSmoothing: 'antialiased', // Antialiasing.
+        MozOsxFontSmoothing: 'grayscale', // Antialiasing.
+      },
+      a: {
+        color: theme.palette.accent.A400,
+        textDecoration: 'none',
+      },
+      'a:hover': {
+        textDecoration: 'underline',
+      },
+      img: {
+        maxWidth: '100%',
+        height: 'auto',
+        width: 'auto',
+      },
+    },
     appFrame: {
       display: 'flex',
       alignItems: 'stretch',
@@ -89,88 +100,42 @@ const styleSheet = createStyleSheet('AppFrame', (theme) => {
 class AppFrame extends Component {
   static propTypes = {
     children: PropTypes.node,
-    dispatch: PropTypes.func,
+    dispatch: PropTypes.func.isRequired,
     routes: PropTypes.array,
+    width: PropTypes.string.isRequired,
   };
 
   static contextTypes = {
-    theme: PropTypes.object.isRequired,
     styleManager: PropTypes.object.isRequired,
   };
 
   state = {
-    drawerDocked: false,
     drawerOpen: false,
   };
 
-  componentWillMount() {
-    this.context.styleManager.render(globalStyleSheet);
-    this.resizeListener = addEventListener(window, 'resize', this.handleResize);
-  }
-
-  componentDidMount() {
-    this.mounted = true;
-    this.checkWindowSize();
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-
-    if (this.resizeListener) {
-      this.resizeListener.remove();
-    }
-  }
-
-  mounted = false;
-  resizeListener = undefined;
-
-  checkWindowSize = () => {
-    if (!this.mounted) {
-      return;
-    }
-
-    const breakpoint = this.context.theme.breakpoints.getWidth('lg');
-
-    if (this.state.drawerDocked && window.innerWidth < breakpoint) {
-      this.setState({ drawerDocked: false });
-    } else if (!this.state.drawerDocked && window.innerWidth >= breakpoint) {
-      this.setState({ drawerDocked: true });
-    }
+  handleDrawerClose = () => {
+    this.setState({ drawerOpen: false });
   };
 
-  handleResize = throttle(this.checkWindowSize, 100);
+  handleDrawerToggle = () => {
+    this.setState({ drawerOpen: !this.state.drawerOpen });
+  };
 
-  handleDrawerOpen = () => this.setState({ drawerOpen: true });
-  handleDrawerClose = () => this.setState({ drawerOpen: false });
-  handleDrawerToggle = () => this.setState({ drawerOpen: !this.state.drawerOpen });
-
-  handleToggleShade = () => this.props.dispatch({ type: 'TOGGLE_THEME_SHADE' });
-
-  getTitle() {
-    const { routes } = this.props;
-    for (let i = routes.length - 1; i >= 0; i--) {
-      if (routes[i].hasOwnProperty('title')) {
-        return routes[i].title;
-      }
-    }
-    return null;
-  }
-
-  getCurrentPath() {
-    const { routes } = this.props;
-    for (let i = routes.length - 1; i >= 0; i--) {
-      if (routes[i].hasOwnProperty('path')) {
-        return routes[i].path;
-      }
-    }
-    return null;
-  }
+  handleToggleShade = () => {
+    this.props.dispatch({ type: 'TOGGLE_THEME_SHADE' });
+  };
 
   render() {
-    const classes = this.context.styleManager.render(styleSheet);
-    const title = this.getTitle();
+    const {
+      children,
+      routes,
+      width,
+    } = this.props;
 
-    let drawerDocked = this.state.drawerDocked;
+    const classes = this.context.styleManager.render(styleSheet);
+    const title = getTitle(routes);
+
+    let drawerDocked = isWidthUp('lg', width);
     let navIconClassName = classes.navIcon;
     let appBarClassName = classes.appBar;
 
@@ -187,32 +152,33 @@ class AppFrame extends Component {
         <AppBar className={appBarClassName}>
           <Toolbar>
             <IconButton contrast onClick={this.handleDrawerToggle} className={navIconClassName}>
-              menu
+              <MenuIcon />
             </IconButton>
-            <Text className={classes.title} type="title">{title}</Text>
+            {title !== null && (
+              <Text className={classes.title} type="title" colorInherit>
+                {title}
+              </Text>
+            )}
             <div className={classes.grow} />
             <IconButton contrast onClick={this.handleToggleShade} className={classes.toggleShade}>
-              lightbulb_outline
+              <LightbulbOutlineIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
         <AppDrawer
           className={classes.drawer}
           docked={drawerDocked}
-          routes={this.props.routes}
+          routes={routes}
           onRequestClose={this.handleDrawerClose}
           open={this.state.drawerOpen}
         />
-        {this.props.children}
+        {children}
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    dark: state.dark,
-  };
-}
-
-export default connect(mapStateToProps)(AppFrame);
+export default compose(
+  withWidth(),
+  connect(),
+)(AppFrame);

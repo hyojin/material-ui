@@ -11,12 +11,12 @@ export const styleSheet = createStyleSheet('CardContent', () => ({
       paddingBottom: 24,
     },
   },
-}), { index: -5 });
+}));
 
 export default function CardContent(props, context) {
   const {
     className: classNameProp,
-    ...other,
+    ...other
   } = props;
 
   const classes = context.styleManager.render(styleSheet);
@@ -28,6 +28,9 @@ export default function CardContent(props, context) {
 }
 
 CardContent.propTypes = {
+  /**
+   * The CSS class name of the root element.
+   */
   className: PropTypes.string,
 };
 

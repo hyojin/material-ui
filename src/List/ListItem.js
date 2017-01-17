@@ -9,12 +9,14 @@ export const styleSheet = createStyleSheet('ListItem', (theme) => {
   return {
     listItem: {
       display: 'flex',
+      flex: '1 1 auto',  // grow primary portion so that secondary is right-aligned
       alignItems: 'center',
       position: 'relative',
       textDecoration: 'none',
     },
     listItemContainer: {
-      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
     },
     keyboardFocused: {
       background: theme.palette.text.divider,
@@ -38,25 +40,32 @@ export const styleSheet = createStyleSheet('ListItem', (theme) => {
       paddingRight: 16,
     },
   };
-}, { index: -5 });
+});
 
 export default class ListItem extends Component {
   static propTypes = {
     button: PropTypes.bool,
     children: PropTypes.node,
+    /**
+     * The CSS class name of the root element.
+     */
     className: PropTypes.string,
     component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    dense: PropTypes.bool,
     /**
      * @ignore
      */
     disabled: PropTypes.bool,
-    dense: PropTypes.bool,
     divider: PropTypes.bool,
     gutters: PropTypes.bool,
   };
 
   static defaultProps = {
+    button: false,
     component: 'div',
+    dense: false,
+    disabled: false,
+    divider: false,
     gutters: true,
   };
 
@@ -74,7 +83,7 @@ export default class ListItem extends Component {
       disabled,
       divider,
       gutters,
-      ...other,
+      ...other
     } = this.props;
 
     const classes = this.context.styleManager.render(styleSheet);

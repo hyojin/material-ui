@@ -6,7 +6,7 @@ import { assert } from 'chai';
 import { createShallowWithContext } from 'test/utils';
 import CircularProgress, { styleSheet } from './CircularProgress';
 
-describe('<CircularProgress>', () => {
+describe('<CircularProgress />', () => {
   let shallow;
   let classes;
 
@@ -32,6 +32,7 @@ describe('<CircularProgress>', () => {
     assert.strictEqual(svg.is('svg'), true, 'should be a svg');
     assert.strictEqual(svg.hasClass(classes.svg), true, 'should have the svg class');
     assert.strictEqual(svg.childAt(0).is('circle'), true, 'should be a circle');
-    assert.strictEqual(svg.childAt(0).hasClass(classes.circle), true, 'should have the circle class');
+    assert.strictEqual(svg.childAt(0).hasClass(classes.circle), true,
+      'should have the circle class');
   });
 });

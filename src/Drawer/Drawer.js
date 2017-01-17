@@ -7,6 +7,20 @@ import Paper from '../Paper';
 import Modal from '../internal/Modal';
 import Slide from '../transitions/Slide';
 
+function getSlideDirection(anchor) {
+  if (anchor === 'left') {
+    return 'right';
+  } else if (anchor === 'right') {
+    return 'left';
+  } else if (anchor === 'top') {
+    return 'down';
+  } else if (anchor === 'bottom') {
+    return 'up';
+  }
+
+  return 'left';
+}
+
 export const styleSheet = createStyleSheet('Drawer', (theme) => {
   return {
     paper: {
@@ -33,7 +47,7 @@ export const styleSheet = createStyleSheet('Drawer', (theme) => {
     modal: {
     },
   };
-}, { index: -5 });
+});
 
 /**
  * This is a drawer.
@@ -42,7 +56,7 @@ export default class Drawer extends Component {
   static propTypes = {
     anchor: PropTypes.oneOf(['left', 'top', 'right', 'bottom']),
     /**
-     * The contents of the `Drawer`
+     * The contents of the `Drawer`.
      */
     children: PropTypes.node,
     /**
@@ -51,7 +65,7 @@ export default class Drawer extends Component {
     className: PropTypes.string,
     /**
      * If set to true, the drawer will dock itself
-     * and will no longer slide in with an overlay
+     * and will no longer slide in with an overlay.
      */
     docked: PropTypes.bool,
     open: PropTypes.bool,
@@ -63,6 +77,7 @@ export default class Drawer extends Component {
   };
 
   static defaultProps = {
+    docked: false,
     open: false,
     zDepth: 16,
   };
@@ -70,20 +85,6 @@ export default class Drawer extends Component {
   static contextTypes = {
     styleManager: PropTypes.object.isRequired,
   };
-
-  getSlideDirection(anchor) {
-    if (anchor === 'left') {
-      return 'right';
-    } else if (anchor === 'right') {
-      return 'left';
-    } else if (anchor === 'top') {
-      return 'down';
-    } else if (anchor === 'bottom') {
-      return 'up';
-    }
-
-    return 'left';
-  }
 
   render() {
     const {
@@ -94,14 +95,14 @@ export default class Drawer extends Component {
       open,
       paperClassName,
       zDepth,
-      ...other,
+      ...other
     } = this.props;
 
     const { theme: { dir }, render } = this.context.styleManager;
     const classes = render(styleSheet);
     const rtl = dir === 'rtl';
-    const anchor = anchorProp || rtl ? 'right' : 'left';
-    const slideDirection = this.getSlideDirection(anchor);
+    const anchor = anchorProp || (rtl ? 'right' : 'left');
+    const slideDirection = getSlideDirection(anchor);
 
     const drawer = (
       <Slide in={open} direction={slideDirection} transitionAppear>
@@ -128,10 +129,8 @@ export default class Drawer extends Component {
       );
     }
 
-    containerProps.show = open;
-
     return (
-      <Modal {...containerProps}>
+      <Modal {...containerProps} show={open}>
         {drawer}
       </Modal>
     );

@@ -42,7 +42,7 @@ export const styleSheet = createStyleSheet('TableSortLabel', (theme) => {
       transform: 'rotate(180deg)',
     },
   };
-}, { index: -1 });
+});
 
 /**
  * A button based label for placing inside `TableCell` for column sorting.
@@ -73,11 +73,11 @@ export default function TableSortLabel(props, context) {
 
 TableSortLabel.propTypes = {
   /**
-   * If set to true, will have the active styling (should be true for the sorted column)
+   * If set to true, will have the active styling (should be true for the sorted column).
    */
   active: PropTypes.bool,
   /**
-   * Label contents, the arrow will be appended automatically and aligned using flexbox
+   * Label contents, the arrow will be appended automatically and aligned using flexbox.
    */
   children: PropTypes.node,
   /**
@@ -85,12 +85,13 @@ TableSortLabel.propTypes = {
    */
   className: PropTypes.string,
   /**
-   * The current sort direction
+   * The current sort direction.
    */
   direction: PropTypes.oneOf(['asc', 'desc']),
 };
 
 TableSortLabel.defaultProps = {
+  active: false,
   direction: 'desc',
 };
 

@@ -6,6 +6,18 @@ Lists are made up of a continuous column of rows. Each row contains a tile. Prim
 
 Lists are best suited for similar data types.
 
+### Simple List
+
+{{demo='demos/lists/SimpleList.js'}}
+
+### Folder List
+
+{{demo='demos/lists/FolderList.js'}}
+
+### Inset List
+
+{{demo='demos/lists/InsetList.js'}}
+
 ## List Controls
 
 ### Checkbox
@@ -14,14 +26,14 @@ A checkbox can either be a primary action or a secondary action.
 
 The checkbox is the primary action and the state indicator for the list item. The comment button is a secondary action and a separate target.
 
-{{demo='lists/CheckboxList.js'}}
+{{demo='demos/lists/CheckboxList.js'}}
 
 The checkbox is the secondary action for the list item and a separate target.
 
-{{demo='lists/CheckboxListSecondary.js'}}
+{{demo='demos/lists/CheckboxListSecondary.js'}}
 
 ### Switch
 
 The switch is the secondary action and a separate target.
 
-{{demo='lists/SwitchListSecondary.js'}}
+{{demo='demos/lists/SwitchListSecondary.js'}}

@@ -48,7 +48,11 @@ describe('<Menu> integration', () => {
 
     it('should focus the first item as nothing has been selected', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
-      assert.strictEqual(document.activeElement, menuEl.firstChild, 'should be the first menu item');
+      assert.strictEqual(
+        document.activeElement,
+        menuEl && menuEl.firstChild,
+        'should be the first menu item',
+      );
     });
 
     it('should change focus to the 2nd item when down arrow is pressed', () => {
@@ -59,8 +63,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[1],
-        'should be the 2nd menu item'
+        menuEl && menuEl.children[1],
+        'should be the 2nd menu item',
       );
     });
 
@@ -72,8 +76,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[2],
-        'should be the 3rd menu item'
+        menuEl && menuEl.children[2],
+        'should be the 3rd menu item',
       );
     });
 
@@ -85,8 +89,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[2],
-        'should be the 3rd menu item'
+        menuEl && menuEl.children[2],
+        'should be the 3rd menu item',
       );
     });
 
@@ -98,8 +102,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[2],
-        'should be the 3rd menu item'
+        menuEl && menuEl.children[2],
+        'should be the 3rd menu item',
       );
     });
 
@@ -111,8 +115,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[1],
-        'should be the 2nd menu item'
+        menuEl && menuEl.children[1],
+        'should be the 2nd menu item',
       );
     });
 
@@ -157,8 +161,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[2],
-        'should be the 3rd menu item'
+        menuEl && menuEl.children[2],
+        'should be the 3rd menu item',
       );
     });
 
@@ -186,8 +190,8 @@ describe('<Menu> integration', () => {
       const menuEl = document.querySelector('[data-mui-test="Menu"]');
       assert.strictEqual(
         document.activeElement,
-        menuEl.children[1],
-        'should be the 2nd menu item'
+        menuEl && menuEl.children[1],
+        'should be the 2nd menu item',
       );
     });
   });

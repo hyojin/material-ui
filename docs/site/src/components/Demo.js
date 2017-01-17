@@ -5,10 +5,11 @@ import { createStyleSheet } from 'jss-theme-reactor';
 import shallowEqual from 'recompose/shallowEqual';
 import IconButton from 'material-ui/IconButton';
 import Collapse from 'material-ui/transitions/Collapse';
-import MarkdownElement from './MarkdownElement';
+import MarkdownElement from 'docs/site/src/components/MarkdownElement';
+import CodeIcon from 'material-ui/svg-icons/code';
 
-const requireDemos = require.context('../demos', true, /\.js$/);
-const requireDemoSource = require.context('!raw!../demos', true, /\.js$/);
+const requireDemos = require.context('docs/site/src', true, /\.js$/);
+const requireDemoSource = require.context('!raw!docs/site/src', true, /\.js$/);
 
 const styleSheet = createStyleSheet('Demo', (theme) => {
   const { palette, mixins } = theme;
@@ -43,24 +44,24 @@ const styleSheet = createStyleSheet('Demo', (theme) => {
         borderRadius: '0px !important',
       },
     },
-    codeContainer: {
-      color: palette.text.primary,
-      backgroundColor: palette.background.paper,
-    },
     [theme.breakpoints.up(600)]: {
-      codeButton: { display: 'block' },
-      code: { display: 'block' },
+      codeButton: {
+        display: 'block',
+      },
+      code: {
+        display: 'block',
+      },
       root: {
         marginLeft: 0,
         marginRight: 0,
       },
     },
   };
-}, { index: 50 });
+});
 
 export default class Demo extends Component {
   static propTypes = {
-    demo: PropTypes.string,
+    demo: PropTypes.string.isRequired,
   };
 
   static contextTypes = {
@@ -80,10 +81,11 @@ export default class Demo extends Component {
     );
   }
 
-  handleCodeButtonClick = () =>
+  handleCodeButtonClick = () => {
     this.setState({
       codeOpen: !this.state.codeOpen,
     });
+  }
 
   render() {
     const DemoComponent = requireDemos(`./${this.props.demo}`).default;
@@ -97,7 +99,7 @@ export default class Demo extends Component {
           onClick={this.handleCodeButtonClick}
           className={classes.codeButton}
         >
-          code
+          <CodeIcon />
         </IconButton>
         <Collapse in={this.state.codeOpen}>
           <MarkdownElement className={classes.code} text={code} />

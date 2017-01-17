@@ -26,25 +26,23 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: ['babel'],
+        loaders: ['babel-loader'],
       },
       {
         test: /\.svg$/,
-        loader: 'file',
-        include: /assets\/images/,
+        loader: 'file-loader',
       },
       {
         test: /\.(jpg|gif|png)$/,
-        loader: 'file!img',
-        include: /assets\/images/,
+        loader: 'file-loader!img-loader',
       },
       {
         test: /\.md$/,
-        loader: 'raw',
+        loader: 'raw-loader',
       },
       {
         test: /\.css$/,
-        loader: 'style!css',
+        loader: 'style-loader!css-loader',
       },
     ],
   },
@@ -52,9 +50,6 @@ module.exports = {
     alias: {
       docs: path.resolve(__dirname, '../../docs'),
       'material-ui': path.resolve(__dirname, '../../src'),
-      react: path.resolve(__dirname, 'node_modules/react'),
-      'react-a11y': path.resolve(__dirname, '../../node_modules/react-a11y'),
-      lodash: path.resolve(__dirname, '../../node_modules/lodash'),
     },
   },
   progress: true,

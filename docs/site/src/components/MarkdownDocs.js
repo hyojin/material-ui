@@ -1,64 +1,43 @@
 // @flow weak
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { createStyleSheet } from 'jss-theme-reactor';
-import MarkdownElement from './MarkdownElement';
+import MarkdownElement from 'docs/site/src/components/MarkdownElement';
 import Demo from './Demo';
 
-const styleSheet = createStyleSheet('MarkdownDocs', (theme) => {
+const styleSheet = createStyleSheet('MarkdownDocs', () => {
   return {
-    content: {
+    root: {
       marginBottom: 100,
-      '& pre': {
-        margin: '25px 0',
-        padding: '12px 18px',
-        backgroundColor: theme.palette.background.paper,
-        borderRadius: 3,
-      },
-      '& pre code': {
-        lineHeight: 1.6,
-        padding: 0,
-        fontSize: 14,
-      },
-      '& code': {
-        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
-        padding: '3px 6px',
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.background.paper,
-        fontSize: 14,
-      },
     },
   };
 });
 
 const demoRegexp = /^demo='(.*)'$/;
 
-export default class MarkdownDocs extends Component {
+export default function MarkdownDocs(props, context) {
+  const classes = context.styleManager.render(styleSheet);
+  const contents = props.route.content.split(/(?:^{{)|(?:}}$)/gm);
 
-  static propTypes = {
-    route: PropTypes.object,
-  };
+  return (
+    <div className={classes.root}>
+      {contents.map((content) => {
+        if (demoRegexp.test(content)) {
+          return <Demo key={content} demo={content.match(demoRegexp)[1]} />;
+        }
 
-  static contextTypes = {
-    styleManager: PropTypes.object.isRequired,
-  };
-
-  renderContent(content) {
-    const contents = content.split(/(?:^{{)|(?:}}$)/gm);
-    return contents.map((n, i) => {
-      if (demoRegexp.test(n)) {
-        return <Demo key={i} demo={n.match(demoRegexp)[1]} />;
-      }
-      return <MarkdownElement key={i} text={n} />;
-    });
-  }
-
-  render() {
-    const classes = this.context.styleManager.render(styleSheet);
-    return (
-      <div className={classes.content}>
-        {this.renderContent(this.props.route.content)}
-      </div>
-    );
-  }
+        return <MarkdownElement key={content} text={content} />;
+      })}
+    </div>
+  );
 }
+
+MarkdownDocs.propTypes = {
+  route: PropTypes.shape({
+    content: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+MarkdownDocs.contextTypes = {
+  styleManager: PropTypes.object.isRequired,
+};

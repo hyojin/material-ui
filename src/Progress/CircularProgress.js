@@ -40,19 +40,24 @@ export const styleSheet = createStyleSheet('CircularProgress', (theme) => {
         strokeDashoffset: 0,
       },
       '50%, 58%': {
-        strokeDasharray: `calc((65% - ${THICKNESS}px) * ${PI}), calc((100% - ${THICKNESS}px) * ${PI})`,
+        strokeDasharray: `calc((65% - ${THICKNESS}px) * ${PI}), calc((100% - ${
+          THICKNESS}px) * ${PI})`,
         strokeDashoffset: `calc((25% - ${THICKNESS}px) * -${PI})`,
       },
       '100%': {
-        strokeDasharray: `calc((65% - ${THICKNESS}px) * ${PI}), calc((100% - ${THICKNESS}px) * ${PI})`,
+        strokeDasharray: `calc((65% - ${THICKNESS}px) * ${PI}), calc((100% - ${
+          THICKNESS}px) * ${PI})`,
         strokeDashoffset: `calc((99% - ${THICKNESS}px) * -${PI})`,
       },
     },
   };
-}, { index: -5 });
+});
 
 export default class CircularProgress extends Component {
   static propTypes = {
+    /**
+     * The CSS class name of the root element.
+     */
     className: PropTypes.string,
     /**
      * The mode of show your progress, indeterminate
@@ -83,7 +88,7 @@ export default class CircularProgress extends Component {
       className,
       mode, // eslint-disable-line no-unused-vars
       size,
-      ...other,
+      ...other
     } = this.props;
     const classes = this.context.styleManager.render(styleSheet);
     const radius = size / 2;

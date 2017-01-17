@@ -1,55 +1,9 @@
 // @flow weak
 
-import React, { Component, Children, cloneElement, PropTypes } from 'react';
-import { createStyleSheet } from 'jss-theme-reactor';
-import classNames from 'classnames';
-import { easing } from '../styles/transitions';
-import { createChainedFunction } from '../utils/helpers';
-
-export const styleSheet = createStyleSheet('TextField', (theme) => {
-  const focusColor = theme.palette.accent.A200;
-
-  return {
-    root: {
-      display: 'flex',
-      position: 'relative',
-      marginTop: 16,
-      // Expanding underline
-      '&:after': {
-        backgroundColor: focusColor,
-        left: 0,
-        bottom: 9,
-        content: '\'\'',
-        height: 2,
-        position: 'absolute',
-        width: '100%',
-        transform: 'scaleX(0)',
-        transition: theme.transitions.create(
-          'transform',
-          '200ms',
-          null,
-          easing.easeOut
-        ),
-      },
-    },
-    label: {},
-    input: {
-      display: 'block',
-      marginTop: 10,
-      marginBottom: 10,
-      width: '100%',
-      zIndex: 1,
-    },
-    focused: {
-      '& $label': {
-        color: focusColor,
-      },
-      '&:after': {
-        transform: 'scaleX(1)',
-      },
-    },
-  };
-}, { index: -5 });
+import React, { Component, PropTypes } from 'react';
+import shallowEqual from 'recompose/shallowEqual';
+import { Input, InputLabel } from '../Input';
+import FormControl from '../Form/FormControl';
 
 /**
  * TextField
@@ -65,15 +19,31 @@ export const styleSheet = createStyleSheet('TextField', (theme) => {
 export default class TextField extends Component {
   static propTypes = {
     /**
-     * The contents of the `TextField`
-     */
-    children: PropTypes.node,
-    /**
      * The CSS class name of the root element.
      */
     className: PropTypes.string,
     /**
-     * Whether this text field is required.
+     * Whether the label should be displayed in an error state.
+     */
+    error: PropTypes.bool,
+    /*
+     * @ignore
+     */
+    id: PropTypes.string,
+    /**
+     * The CSS class name of the input element.
+     */
+    inputClassName: PropTypes.string,
+    /**
+     * The label text.
+     */
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    /**
+     * The CSS class name of the label element.
+     */
+    labelClassName: PropTypes.string,
+    /**
+     * Whether the label should be displayed as required (asterisk).
      */
     required: PropTypes.bool,
   };
@@ -82,76 +52,37 @@ export default class TextField extends Component {
     styleManager: PropTypes.object.isRequired,
   };
 
-  state = {
-    dirty: false,
-    focused: false,
-  };
-
-  classes = {};
-
-  handleFocus = () => this.setState({ focused: true });
-  handleBlur = () => this.setState({ focused: false });
-
-  handleDirty = () => {
-    if (!this.state.dirty) {
-      this.setState({ dirty: true });
-    }
-  };
-
-  handleClean = () => {
-    if (this.state.dirty) {
-      this.setState({ dirty: false });
-    }
-  };
-
-  renderChild = (child) => {
-    const { muiName } = child.type;
-
-    if (muiName === 'TextFieldInput') {
-      return this.renderInput(child);
-    } else if (muiName === 'TextFieldLabel') {
-      return this.renderLabel(child);
-    }
-
-    return child;
-  };
-
-  renderInput = (input) =>
-    cloneElement(input, {
-      className: classNames(this.classes.input, input.props.className),
-      onDirty: this.handleDirty,
-      onClean: this.handleClean,
-      onFocus: createChainedFunction(this.handleFocus, input.props.onFocus),
-      onBlur: createChainedFunction(this.handleBlur, input.props.onBlur),
-    });
-
-  renderLabel = (label) =>
-    cloneElement(label, {
-      className: classNames(this.classes.label, label.props.className),
-      focused: this.state.focused,
-      shrink: label.props.hasOwnProperty('shrink') ? // Shrink the label if dirty or focused
-        label.props.shrink : (this.state.dirty || this.state.focused),
-      required: this.props.required,
-    });
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return (
+      !shallowEqual(this.props, nextProps) ||
+      !shallowEqual(this.context.styleManager.theme, nextContext.styleManager.theme)
+    );
+  }
 
   render() {
     const {
-      children,
-      className: classNameProp,
-      ...other,
+      error,
+      className,
+      inputClassName,
+      label,
+      labelClassName,
+      required,
+      ...other
     } = this.props;
 
-    this.classes = this.context.styleManager.render(styleSheet);
-
-    const className = classNames({
-      [this.classes.root]: true,
-      [this.classes.focused]: this.state.focused,
-    }, classNameProp);
-
     return (
-      <div className={className} {...other}>
-        {Children.map(children, this.renderChild)}
-      </div>
+      <FormControl
+        className={className}
+        error={error}
+        required={required}
+      >
+        {label && (
+          <InputLabel className={labelClassName}>
+            {label}
+          </InputLabel>
+        )}
+        <Input className={inputClassName} {...other} />
+      </FormControl>
     );
   }
 }

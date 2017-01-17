@@ -8,7 +8,7 @@ import { spy } from 'sinon';
 import { createShallowWithContext, createMountWithContext } from 'test/utils';
 import ButtonBase, { styleSheet } from './ButtonBase';
 
-describe('<ButtonBase>', () => {
+describe('<ButtonBase />', () => {
   let mount;
   let shallow;
   let classes;
@@ -50,10 +50,12 @@ describe('<ButtonBase>', () => {
 
     it('should render the custom className and the buttonBase class', () => {
       const wrapper = shallow(
-        <ButtonBase className="test-class-name" />
+        <ButtonBase className="test-class-name" />,
       );
-      assert.strictEqual(wrapper.hasClass('test-class-name'), true, 'should pass the test className');
-      assert.strictEqual(wrapper.hasClass(classes.buttonBase), true, 'should have the buttonBase class');
+      assert.strictEqual(wrapper.hasClass('test-class-name'), true,
+        'should pass the test className');
+      assert.strictEqual(wrapper.hasClass(classes.buttonBase), true,
+        'should have the buttonBase class');
     });
 
     it('should change the button type to span and set role="button"', () => {
@@ -119,7 +121,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.pulsate.callCount,
         0,
-        'should not call pulsate on the ripple'
+        'should not call pulsate on the ripple',
       );
     });
 
@@ -130,7 +132,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.start.callCount,
         1,
-        'should call start on the ripple'
+        'should call start on the ripple',
       );
     });
 
@@ -141,7 +143,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         1,
-        'should call stop on the ripple'
+        'should call stop on the ripple',
       );
     });
 
@@ -152,7 +154,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.start.callCount,
         1,
-        'should call start on the ripple'
+        'should call start on the ripple',
       );
     });
 
@@ -163,7 +165,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         1,
-        'should call stop on the ripple'
+        'should call stop on the ripple',
       );
     });
 
@@ -174,7 +176,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.start.callCount,
         1,
-        'should call start on the ripple'
+        'should call start on the ripple',
       );
     });
 
@@ -185,7 +187,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         1,
-        'should call stop on the ripple'
+        'should call stop on the ripple',
       );
     });
 
@@ -217,7 +219,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.pulsate.callCount,
         1,
-        'should call pulsate on the ripple'
+        'should call pulsate on the ripple',
       );
     });
 
@@ -233,24 +235,24 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         0,
-        'should not call stop on the ripple'
+        'should not call stop on the ripple',
       );
     });
 
-    it('should stop pulsate and start a ripple when the space (activation) button is pressed', () => {
+    it('should stop pulsate and start a ripple when the space button is pressed', () => {
       wrapper.instance().ripple = { stop: spy((event, cb) => cb()), start: spy() };
       wrapper.simulate('keyDown', { which: 32, keyCode: 32, key: ' ', persist: () => {} });
 
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         1,
-        'should call stop on the ripple'
+        'should call stop on the ripple',
       );
 
       assert.strictEqual(
         wrapper.instance().ripple.start.callCount,
         1,
-        'should call start on the ripple'
+        'should call start on the ripple',
       );
     });
 
@@ -261,13 +263,13 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         1,
-        'should call stop on the ripple'
+        'should call stop on the ripple',
       );
 
       assert.strictEqual(
         wrapper.instance().ripple.pulsate.callCount,
         1,
-        'should call pulsate on the ripple'
+        'should call pulsate on the ripple',
       );
     });
 
@@ -278,7 +280,7 @@ describe('<ButtonBase>', () => {
       assert.strictEqual(
         wrapper.instance().ripple.stop.callCount,
         1,
-        'should call stop on the ripple'
+        'should call stop on the ripple',
       );
       assert.strictEqual(wrapper.state('keyboardFocused'), false, 'should not be keyboardFocused');
     });
@@ -287,7 +289,7 @@ describe('<ButtonBase>', () => {
   describe('mounted tab press listener', () => {
     it('should listen for tab presses and set keyboard focus', (done) => {
       const wrapper = mount(
-        <ButtonBase id="test-button">Hello</ButtonBase>
+        <ButtonBase id="test-button">Hello</ButtonBase>,
       );
 
       const button = document.getElementById('test-button');
@@ -301,10 +303,17 @@ describe('<ButtonBase>', () => {
         assert.strictEqual(
           wrapper.state('keyboardFocused'),
           true,
-          'should be keyboardFocused'
+          'should be keyboardFocused',
         );
         done();
       }, 200);
+    });
+  });
+
+  describe('prop: disabled', () => {
+    it('should apply the right tabIndex', () => {
+      const wrapper = shallow(<ButtonBase disabled>Hello</ButtonBase>);
+      assert.strictEqual(wrapper.props().tabIndex, '-1', 'should not receive the focus');
     });
   });
 });

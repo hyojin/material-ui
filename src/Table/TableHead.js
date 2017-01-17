@@ -8,11 +8,11 @@ export const styleSheet = createStyleSheet('TableHead', (theme) => {
   return {
     root: {
       fontSize: 12,
-      fontWeight: 500,
+      fontWeight: theme.typography.fontWeightMedium,
       color: theme.palette.text.secondary,
     },
   };
-}, { index: -1 });
+});
 
 /**
  * A material table head.
@@ -42,15 +42,19 @@ export default class TableHead extends Component {
 
   static childContextTypes = { table: PropTypes.object };
 
-  getChildContext() {
-    return { table: { head: true } };
+  getChildContext() { // eslint-disable-line class-methods-use-this
+    return {
+      table: {
+        head: true,
+      },
+    };
   }
 
   render() {
     const {
       className: classNameProp,
       children,
-      ...other,
+      ...other
     } = this.props;
     const classes = this.context.styleManager.render(styleSheet);
     const className = classNames(classes.root, classNameProp);

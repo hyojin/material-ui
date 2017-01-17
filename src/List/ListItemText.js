@@ -5,7 +5,7 @@ import { createStyleSheet } from 'jss-theme-reactor';
 import classNames from 'classnames';
 import Text from '../Text';
 
-export const styleSheet = createStyleSheet('ListItemText', (theme) => {
+export const styleSheet = createStyleSheet('ListItemText', () => {
   return {
     root: {
       flex: '1 1 auto',
@@ -14,42 +14,65 @@ export const styleSheet = createStyleSheet('ListItemText', (theme) => {
         paddingLeft: 0,
       },
     },
-    secondary: {
-      color: theme.palette.text.secondary,
+    inset: {
+      '&:first-child': {
+        paddingLeft: 56,
+      },
     },
   };
-}, { index: -5 });
+});
 
 export default function ListItemText(props, context) {
   const {
     className: classNameProp,
     primary,
     secondary,
-    ...other,
+    inset,
+    ...other
   } = props;
   const classes = context.styleManager.render(styleSheet);
-  const className = classNames(classes.root, classNameProp);
+  const className = classNames(classes.root, {
+    [classes.inset]: inset,
+  }, classNameProp);
 
   return (
     <div className={className} {...other}>
       {primary && (
         typeof primary === 'string' ? (
-          <Text type="subheading">{primary}</Text>
-        ) : { primary }
+          <Text type="subheading">
+            {primary}
+          </Text>
+        ) : primary
       )}
       {secondary && (
         typeof secondary === 'string' ? (
-          <Text className={classes.secondary} type="body1">{secondary}</Text>
-        ) : { secondary }
+          <Text secondary type="body1">
+            {secondary}
+          </Text>
+        ) : secondary
       )}
     </div>
   );
 }
 
 ListItemText.propTypes = {
+  /**
+   * The CSS class name of the root element.
+   */
   className: PropTypes.string,
+  /**
+   * If true, the children will be indented by 72px.
+   * This is useful if there is no left avatar or left icon.
+   */
+  inset: PropTypes.bool,
   primary: PropTypes.node,
   secondary: PropTypes.node,
+};
+
+ListItemText.defaultProps = {
+  primary: false,
+  secondary: false,
+  inset: false,
 };
 
 ListItemText.contextTypes = {

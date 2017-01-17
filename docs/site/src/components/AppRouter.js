@@ -1,12 +1,20 @@
 // @flow weak
 
-import { hashHistory, Router, Route, IndexRoute, IndexRedirect } from 'react-router';
 import React from 'react';
+import {
+  applyRouterMiddleware,
+  hashHistory,
+  Router,
+  Route,
+  IndexRoute,
+  IndexRedirect,
+} from 'react-router';
+import { useScroll } from 'react-router-scroll';
+import { kebabCase, titleize } from 'docs/site/src/utils/helpers';
 import AppFrame from './AppFrame';
 import AppContent from './AppContent';
-import Home from '../pages/Home';
 import MarkdownDocs from './MarkdownDocs';
-import { kebabCase, titleize } from '../utils/helpers';
+import Home from '../pages/Home';
 
 /**
  * This lets us eager load the files ahead of time
@@ -15,7 +23,7 @@ import { kebabCase, titleize } from '../utils/helpers';
 const requireDocs = require.context(
   './../../../../docs',
   true,
-  /^((?![\\/]site|node_modules[\\/]).)*\.md$/
+  /^((?![\\/]site\/src\/demos|node_modules[\\/]).)*\.md$/,
 );
 const docFiles = requireDocs.keys();
 const apiDocs = docFiles.reduce((res, n) => {
@@ -29,21 +37,24 @@ const apiDocs = docFiles.reduce((res, n) => {
 }, []);
 
 const requireDemos = require.context('../demos', true, /\.md$/);
-const demoFiles = requireDemos.keys();
-const demos = demoFiles.reduce((res, n) => {
-  res.push({
-    path: n,
-    name: n.replace(/.*\//, '').replace('.md', ''),
-  });
-  return res;
-}, []);
+const demos = requireDemos
+  .keys()
+  .reduce((res, n) => {
+    res.push({
+      path: n,
+      name: n.replace(/.*\//, '').replace('.md', ''),
+    });
+    return res;
+  }, []);
 
-export default function AppRouter(props) {
+export default function AppRouter() {
   return (
-    <Router history={hashHistory} {...props}>
+    <Router
+      history={hashHistory}
+      render={applyRouterMiddleware(useScroll())}
+    >
       <Route title="Material UI" path="/" component={AppFrame}>
         <IndexRoute dockDrawer component={Home} title={null} />
-
         <Route
           title="Getting Started"
           path="/getting-started"
@@ -51,13 +62,6 @@ export default function AppRouter(props) {
           component={AppContent}
         >
           <IndexRedirect to="installation" />
-          <Route
-            title="Required Knowledge"
-            path="/getting-started/required-knowledge"
-            content={requireDocs('./getting-started/required-knowledge.md')}
-            component={MarkdownDocs}
-            nav
-          />
           <Route
             title="Installation"
             path="/getting-started/installation"
@@ -87,7 +91,6 @@ export default function AppRouter(props) {
             nav
           />
         </Route>
-
         <Route
           title="Customization"
           path="/customization"
@@ -103,47 +106,79 @@ export default function AppRouter(props) {
             nav
           />
         </Route>
-
+        <Route
+          title="Style"
+          path="/style"
+          nav
+          component={AppContent}
+        >
+          <Route
+            title="Icons"
+            path="/style/icons"
+            content={requireDocs('./site/src/pages/style/icons/icons.md')}
+            component={MarkdownDocs}
+            nav
+          />
+          <Route
+            title="Typography"
+            path="/style/typography"
+            content={requireDocs('./site/src/pages/style/typography/typography.md')}
+            component={MarkdownDocs}
+            nav
+          />
+        </Route>
+        <Route
+          title="Layout"
+          path="/layout"
+          nav
+          component={AppContent}
+        >
+          <Route
+            title="Responsive UI"
+            path="/layout/responsive-ui"
+            content={requireDocs('./site/src/pages/layout/responsive-ui/responsive-ui.md')}
+            component={MarkdownDocs}
+            nav
+          />
+        </Route>
         <Route
           title="Component Demos"
           path="/component-demos"
           nav
           component={AppContent}
         >
-          {demos.map(((n, i) => {
+          {demos.map(((demo) => {
             return (
               <Route
-                key={i}
-                title={titleize(n.name)}
-                path={`/component-demos/${n.name}`}
-                content={requireDemos(n.path)}
+                key={demo.name}
+                title={titleize(demo.name)}
+                path={`/component-demos/${demo.name}`}
+                content={requireDemos(demo.path)}
                 component={MarkdownDocs}
                 nav
               />
             );
           }))}
         </Route>
-
         <Route
           title="Component API"
           path="/component-api"
           nav
           component={AppContent}
         >
-          {apiDocs.map(((n, i) => {
+          {apiDocs.map(((demo) => {
             return (
               <Route
-                key={i}
-                title={n.name}
-                path={`/component-api/${kebabCase(n.name)}`}
-                content={requireDocs(n.path)}
+                key={demo.name}
+                title={demo.name}
+                path={`/component-api/${kebabCase(demo.name)}`}
+                content={requireDocs(demo.path)}
                 component={MarkdownDocs}
                 nav
               />
             );
           }))}
         </Route>
-
         <Route
           title="Discover More"
           path="/discover-more"
